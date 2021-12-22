@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    char map[55][55];
+    int min[55][55], i, j, max = 0, x, y, q[2500][2], r, f, n, m;
+
+    scanf("%d %d", &n, &m);
+
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= m; j++)
+        {
+            scanf("\n");
+            scanf("%c", &map[i][j]);
+        }
+    }
+
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= m; j++)
+        {
+            if (map[i][j] == 'L')
+            {
+                for (x = 1; x <= n; x++)
+                {
+                    for (y = 1; y <= m; y++)
+                    {
+                        min[x][y] = 99999;
+                    }
+                }
+                x = i;
+                y = j;
+                r = f = -1;
+                q[++r][0] = x;
+                q[r][1] = y;
+                min[x][y] = 0;
+
+                while (r != f)
+                {
+                    x = q[++f][0];
+                    y = q[f][1];
+
+                    if (map[x][y + 1] == 'L' && min[x][y + 1] > min[x][y] + 1 && y + 1 <= m)
+                    {
+                        q[++r][0] = x;
+                        q[r][1] = y + 1;
+                        min[x][y + 1] = min[x][y] + 1;
+                    }
+
+                    if (map[x][y - 1] == 'L' && min[x][y - 1] > min[x][y] + 1 && y - 1 >= 1)
+                    {
+                        q[++r][0] = x;
+                        q[r][1] = y - 1;
+                        min[x][y - 1] = min[x][y] + 1;
+                    }
+
+                    if (map[x - 1][y] == 'L' && min[x - 1][y] > min[x][y] + 1 && x - 1 >= 1)
+                    {
+                        q[++r][0] = x - 1;
+                        q[r][1] = y;
+                        min[x - 1][y] = min[x][y] + 1;
+                    }
+
+                    if (map[x + 1][y] == 'L' && min[x + 1][y] > min[x][y] + 1 && x + 1 <= m)
+                    {
+                        q[++r][0] = x + 1;
+                        q[r][1] = y;
+                        min[x + 1][y] = min[x][y] + 1;
+                    }
+                }
+                for (x = 1; x <= n; x++)
+                {
+                    for (y = 1; y <= m; y++)
+                    {
+                        if (min[x][y] != 99999 && min[x][y] > max) max = min[x][y];
+                    }
+                }
+            }
+        }
+    }
+    printf("%d", max);
+    return 0;
+}
